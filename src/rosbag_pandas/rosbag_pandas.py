@@ -12,7 +12,7 @@ import rosbag
 from roslib.message import get_message_class
 
 
-def bag_to_dataframe(bag_name, include=None, exclude=None, parse_header=False, seconds=False):
+def bag_to_dataframe(bag_name, include=None, exclude=None, parse_header=False, seconds=False, num_joints=6):
     '''
     Read in a rosbag file and create a pandas data frame that
     is indexed by the time the message was recorded in the bag.
@@ -50,11 +50,14 @@ def bag_to_dataframe(bag_name, include=None, exclude=None, parse_header=False, s
                 arr.fill(np.nan)
             elif isinstance(t, list):
                 arr = np.empty(length)
-                for i in range(len(t)):
-                    key_i = '{0}{1}'.format(key, i)
-                    datastore[key_i] = arr.copy()
-                continue
                 arr.fill(np.nan)
+                if topic == '/joint_states':
+                    for i in range(num_joints):
+                        key_i = '{0}{1}'.format(key, i)
+                        datastore[key_i] = arr.copy()
+                    continue
+                else:
+                    warnings.warn('Cannot convert {}.{} of type list efficiently'.format(topic, key))
             else:
                 arr = np.empty(length, dtype=np.object)
             datastore[key] = arr
