@@ -82,7 +82,7 @@ def bag_to_dataframe(bag_name, include=None, exclude=None, parse_header=False, s
         for f, key in fields.iteritems():
             try:
                 d = get_message_data(msg, f)
-                if isinstance(d, tuple):
+                if isinstance(d, tuple) or isinstance(d, list):
                     for i, val in enumerate(d):
                         key_i = '{0}{1}'.format(key, i)
                         datastore[key_i][idx] = val
