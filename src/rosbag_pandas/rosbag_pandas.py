@@ -47,14 +47,14 @@ def bag_to_dataframe(bag_name, include=None, exclude=None, parse_header=False, s
             t = msg_type[topic][f]
             if isinstance(t, int) or isinstance(t, float):
                 arr = np.empty(length)
-                arr.fill(np.NAN)
+                arr.fill(np.nan)
             elif isinstance(t, list):
                 arr = np.empty(length)
-                arr.fill(np.NAN)
                 for i in range(len(t)):
                     key_i = '{0}{1}'.format(key, i)
                     datastore[key_i] = arr.copy()
                 continue
+                arr.fill(np.nan)
             else:
                 arr = np.empty(length, dtype=np.object)
             datastore[key] = arr
